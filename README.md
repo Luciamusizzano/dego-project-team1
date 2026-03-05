@@ -30,9 +30,11 @@ Our fairness evaluation assessed whether demographic attributes like gender or a
 * **Age & Financial Correlation:** Approval outcomes are primarily associated with age-related financial characteristics (annual income, credit history length) rather than being driven by a single attribute alone.
 
 ## 4. Privacy & Governance Gaps
-*This section will be updated upon completion of Phase 3 (Privacy & Remediation).*
-* **Identified PII:** Social Security Numbers (SSN), Full Names, Email Addresses, Date of Birth, and IP Addresses.
-* **Proposed Governance Controls:** Implementation of hashing/pseudonymization protocols and strict data retention policies to comply with GDPR data minimization requirements.
+The governance audit evaluated privacy risks and regulatory compliance related to the credit application dataset.
+* **Identified PII:** Social Security Numbers (SSN), Full Names, Email Addresses, Date of Birth, ZIP Codes, and IP Addresses were identified as direct or quasi-identifiers capable of revealing or indirectly linking to individual identities.
+* **Re-identification Risk:** A k-anonymity assessment showed that combinations of demographic attributes (age, gender, ZIP code) can uniquely identify individuals in the dataset, indicating potential linkage risks even after removing direct identifiers.
+* **Governance Gaps:** The dataset stores highly sensitive identifiers and lacks explicit privacy controls, audit traceability, and fairness monitoring mechanisms within the data pipeline.
+* **Proposed Governance Controls:** Implementation of pseudonymization (SHA-256 hashing), anonymization of quasi-identifiers (generalization and masking), and governance controls aligned with GDPR data minimization and EU AI Act requirements for high-risk credit decision systems.
 
 ## 5. Repository Structure
 To ensure full reproducibility of our ETL pipeline and analysis, the repository is structured as follows:
@@ -46,4 +48,4 @@ To ensure full reproducibility of our ETL pipeline and analysis, the repository 
 ## 6. Team Contributions
 * **Alessandro Rollandin - Data Engineer & Product Lead:** Developed the JSON flattening logic, performed the 4-dimensional data quality audit, built the remediation pipeline, and structured the project repository.
 * **Alexia Sousa - Data Scientist & Product Lead:** Conducted disparate impact and proxy discrimination analysis using Fairlearn.
-* **Lucia Musizzano - Governance Officer & Product Lead:** [Add contribution]
+* **Lucia Musizzano - Governance Officer & Product Lead:**  Governance Officer & Product Lead:** Performed the privacy and governance audit, identifying PII, implementing pseudonymization via SHA-256 hashing, evaluating re-identification risk through k-anonymity, and defining GDPR- and AI Act-aligned governance controls for the credit decision system.
