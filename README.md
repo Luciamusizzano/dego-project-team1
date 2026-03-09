@@ -24,10 +24,22 @@ We conducted a systematic audit across the four core dimensions of data quality.
 | **Accuracy (Duplication)** | • Entity duplication: Found 3 unique SSNs that were duplicated across 11 different application records. | • Dropped exact row duplicates, keeping only the first valid entity representation based on SSN. |
 
 ## 3. Algorithmic Bias & Fairness Analysis
-Our fairness evaluation assessed whether demographic attributes like gender or age improperly influenced loan approval outcomes.
-* **Disparate Impact:** The Disparate Impact (DI) ratio for gender is **0.77** (Female approval rate: 50.6%, Male: 65.8%). This falls below the industry-standard 0.8 threshold (the four-fifths rule), indicating a disparate impact on female applicants.
-* **Proxy Discrimination:** A Chi-Square test revealed a significant relationship between **ZIP Code and Gender** (p-value < 0.05), indicating geographic data is acting as a proxy variable for gender in the algorithmic pipeline.
-* **Age & Financial Correlation:** Approval outcomes are primarily associated with age-related financial characteristics (annual income, credit history length) rather than being driven by a single attribute alone.
+We evaluated whether demographic attributes influence loan approval outcomes and whether other variables in the dataset may indirectly encode protected characteristics.
+
+### 3.1 Gender Disparity
+To evaluate gender fairness, we calculated the Disparate Impact (DI) ratio, which compares approval rates between groups.
+The **DI ratio is 0.77**, meaning that female applicants are approved at a lower rate than male applicants. This value falls below the commonly used 0.8 four-fifths threshold, indicating a potential disparity in approval outcomes.
+A Chi-Square test of independence also shows a **significant relationship between gender and loan approval decisions**, suggesting that gender-related patterns exist in the historical lending data.
+
+### 3.2 Age Effects
+We then analyzed approval patterns across age groups, grouping applicants into age bins to compare outcomes across different life stages.
+The results show that **younger applicants tend to have lower approval rates**, while middle-age groups receive approvals more frequently. A Chi-Square test confirms that **age is also associated with loan approval outcomes**, indicating that approval decisions vary across age groups.
+
+### 3.3 Proxy Discrimination
+We investigated whether ZIP code could act as a proxy variable for demographic characteristics.
+While approval rates vary across locations, ZIP code itself is **not significantly associated with loan approval outcomes**. However, further analysis revealed a **significant relationship between ZIP code and gender**, suggesting that geographic information may indirectly encode gender patterns in the dataset.
+
+We also analyzed if **financial variables** could act as proxy to demographic attributes. We observed that variables such as **annual income and credit history length are moderately correlated with age**, indicating that financial characteristics may indirectly capture age-related patterns.
 
 ## 4. Privacy & Governance Gaps
 The governance audit evaluated privacy risks and regulatory compliance related to the credit application dataset.
@@ -43,9 +55,12 @@ To ensure full reproducibility of our ETL pipeline and analysis, the repository 
 * `notebooks/`: 
   * `01-data-quality.ipynb`: The ETL and data cleaning pipeline handling nested JSON parsing and quality remediation.
   * `02-bias-analysis.ipynb`: The algorithmic fairness, disparate impact, and proxy variable analysis using `fairlearn`.
-  * `03-privacy-remediation.ipynb`: *(WIP)* Implementation of GDPR-compliant data masking and pseudonymization.
+  * `03-privacy-remediation.ipynb`: Implementation of GDPR-compliant data masking and pseudonymization.
+* `presentation/`:
+  * `NovaCred_Presentation_team1.pdf`: Slide deck used for the video presentation.
+  * `video_link.txt`: Text file containing the link to the recorded presentation video.
 
 ## 6. Team Contributions
 * **Alessandro Rollandin - Data Engineer & Product Lead:** Developed the JSON flattening logic, performed the 4-dimensional data quality audit, built the remediation pipeline, and structured the project repository.
-* **Alexia Sousa - Data Scientist & Product Lead:** Conducted disparate impact and proxy discrimination analysis using Fairlearn.
-* **Lucia Musizzano - Governance Officer & Product Lead:**  Governance Officer & Product Lead:** Performed the privacy and governance audit, identifying PII, implementing pseudonymization via SHA-256 hashing, evaluating re-identification risk through k-anonymity, and defining GDPR- and AI Act-aligned governance controls for the credit decision system.
+* **Alexia Sousa - Data Scientist & Product Lead:** Conducted the fairness analysis by evaluating demographic influences on loan approval outcomes, performing statistical tests to assess relationships between demographic attributes and approvals, investigating proxy discrimination and analysing interaction effects.
+* **Lucia Musizzano - Governance Officer & Product Lead:** Performed the privacy and governance audit, identifying PII, implementing pseudonymization via SHA-256 hashing, evaluating re-identification risk through k-anonymity, and defining GDPR and AI Act-aligned governance controls for the credit decision system.
